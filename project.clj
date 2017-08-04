@@ -1,4 +1,4 @@
-(defproject reinen-vernunft "0.1.0-SNAPSHOT"
+(defproject fogus/reinen-vernunft "0.1.0-SNAPSHOT"
   :description "Code conversations in Clojure regarding the application of pure reasoning algorithms."
   :url "https://github.com/fogus/reinen-vernunft"
   :license {:name "Eclipse Public License"

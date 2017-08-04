@@ -1,6 +1,6 @@
 (ns reinen-vernunft.core-test
   (:require [clojure.test :refer :all]
-            [reinen-vernunft.core :refer :all]))
+            [fogus.reinen-vernunft.core :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."
