@@ -49,7 +49,12 @@
 
 ;; Stage 1: Unifications
 
-(defn unifications [[clause & more :as clauses] facts context]
+(defn unifications 
+  "Walks through all of the clauses in an implied antecedent and matches 
+   each against every fact provided.  Returns a seq of contexts representing
+   all of the bindings established by the antecedent unifications across all
+   facts provided."
+  [[clause & more :as clauses] facts context]
   (if clause
     (let [bindings (keep #(u/unify clause % context) facts)]
       (mapcat #(unifications more facts %) bindings))
