@@ -3,3 +3,8 @@
 ## EAV sets
 
 TODO
+
+## Logic variables
+
+TODO
+
