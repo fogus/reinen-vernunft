@@ -49,4 +49,9 @@
 
 ;; Stage 1: Unifications
 
+(defn unifications [[clause & more :as clauses] facts context]
+  (if clause
+    (let [bindings (keep #(u/unify clause % context) facts)]
+      (mapcat #(unifications more facts %) bindings))
+    [context]))
 
