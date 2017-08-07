@@ -60,3 +60,12 @@
       (mapcat #(unifications more facts %) bindings))
     [context]))
 
+;; Stage 2: Rule selection
+
+(defn select-rule [selection-strategy {:keys [rules facts]}]
+  (let [possibilities 
+        (for [rule    rules
+              bindings (unifications (:antecedent rule) facts {})]
+          [rule bindings])]
+    (selection-strategy possibilities)))
+
