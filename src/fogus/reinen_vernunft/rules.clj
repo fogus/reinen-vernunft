@@ -88,7 +88,10 @@
 
 ;; Stage 3b: Repeated substitution and assertion
 
-(defn states [kb] 
+(defn states 
+  "Will apply the result of one rule firing to the fact base and feed 
+   the result forward into the next firing."
+  [kb] 
   (iterate #(step (:rules kb) %)
            (set (:facts kb))))
 
