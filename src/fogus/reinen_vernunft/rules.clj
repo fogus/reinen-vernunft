@@ -82,7 +82,9 @@
 
 ;; Stage 3a: Single substitution and assertion
 
-(defn step [rules facts]
+(defn step 
+  "Takes a set of rules and facts and returns a new fact base based on the application of single rule."
+  [rules facts]
   (when-let [[rule binds] (select-rule rand-nth rules facts)]
     (apply-rule rule facts binds)))
 
