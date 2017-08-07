@@ -80,4 +80,8 @@
                          (u/subst rhs context)))]
     (s/union new-facts facts)))
 
+;; Stage 3a: Repeated substitution and assertion
 
+(defn step [rules facts]
+  (when-let [[rule binds] (select-rule rand-nth rules facts)]
+    (apply-rule rule facts binds)))
