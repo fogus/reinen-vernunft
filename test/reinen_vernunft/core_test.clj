@@ -40,5 +40,15 @@
   (testing "that rules are selected as expected"
     (let [first-matching-rule (comp first identity)]
       (is (= (first (:rules KB))
-             (first (rule/select-rule first-matching-rule  KB)))))))
+             (first (rule/select-rule first-matching-rule KB)))))))
+
+(deftest test-apply-rule
+  (testing "that a rule applied to a KB causes expected assertions"
+    (let [first-matching-rule (comp first identity)
+          [rule binds]        (rule/select-rule first-matching-rule KB)]
+      (is (= #{[-51 :emergency/type :emergency.type/flood]
+               [-50 :emergency/type :emergency.type/fire]
+               [-1000 :response/type :response.type/activate-sprinklers]
+               [-1000 :response/to -50]}
+             (rule/apply-rule rule (:facts KB) binds))))))
 
