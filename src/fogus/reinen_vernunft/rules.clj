@@ -92,3 +92,5 @@
   (iterate #(step (:rules kb) %)
            (set (:facts kb))))
 
+(defn cycle [qf kb]
+  (qf (states kb)))
