@@ -73,3 +73,11 @@
     (selection-strategy possibilities)))
 
 
+;; Stage 3: Consequent substitutions and assertion
+
+(defn apply-rule [rule facts context]
+  (let [new-facts (set (for [rhs (:consequent rule)]
+                         (u/subst rhs context)))]
+    (s/union new-facts facts)))
+
+
