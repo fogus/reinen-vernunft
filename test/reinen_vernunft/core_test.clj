@@ -38,5 +38,7 @@
 
 (deftest test-select-rule
   (testing "that rules are selected as expected"
-    (is (= (first (:rules KB))
-           (ffirst (rule/select-rule identity KB))))))
+    (let [first-matching-rule (comp first identity)]
+      (is (= (first (:rules KB))
+             (first (rule/select-rule first-matching-rule  KB)))))))
+

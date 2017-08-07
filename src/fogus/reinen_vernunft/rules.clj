@@ -62,7 +62,10 @@
 
 ;; Stage 2: Rule selection
 
-(defn select-rule [selection-strategy {:keys [rules facts]}]
+(defn select-rule 
+  "Builds a sequence of bindings paired with each rule and then uses a selection 
+   function to execute one of the rules that matched."
+  [selection-strategy {:keys [rules facts]}]
   (let [possibilities 
         (for [rule    rules
               bindings (unifications (:antecedent rule) facts {})]
