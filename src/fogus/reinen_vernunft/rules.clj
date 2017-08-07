@@ -69,3 +69,4 @@
           [rule bindings])]
     (selection-strategy possibilities)))
 
+

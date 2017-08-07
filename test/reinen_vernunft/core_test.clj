@@ -36,4 +36,7 @@
                               (conj all-facts [-5000000 :response/to -50])
                               {})))))
 
-
+(deftest test-select-rule
+  (testing "that rules are selected as expected"
+    (is (= (first (:rules KB))
+           (ffirst (rule/select-rule identity KB))))))
