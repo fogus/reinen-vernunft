@@ -92,7 +92,11 @@
   (iterate #(step (:rules kb) %)
            (set (:facts kb))))
 
-(defn cycle [qf kb]
+(defn cycle 
+  "Feeds the results of states into a function qf that is responsible for 
+   detecting when rule firings have stopped and returns an augmented
+   fact set."
+  [qf kb]
   (qf (states kb)))
 
 ;; Stage 4: System quiessence
