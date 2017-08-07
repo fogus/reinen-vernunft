@@ -80,8 +80,15 @@
                          (u/subst rhs context)))]
     (s/union new-facts facts)))
 
-;; Stage 3a: Repeated substitution and assertion
+;; Stage 3a: Single substitution and assertion
 
 (defn step [rules facts]
   (when-let [[rule binds] (select-rule rand-nth rules facts)]
     (apply-rule rule facts binds)))
+
+;; Stage 3b: Repeated substitution and assertion
+
+(defn states [kb] 
+  (iterate #(step (:rules kb) %)
+           (set (:facts kb))))
+
