@@ -94,3 +94,12 @@
 
 (defn cycle [qf kb]
   (qf (states kb)))
+
+;; Stage 4: System quiessence
+
+(defn naive-qf 
+  "Takes the last environment in a long sequence of states in the hope that 
+   the sequence was long enough that all of the rules fired in creating it."
+  [states]
+  (last (take 256 states)))
+
