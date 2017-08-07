@@ -22,4 +22,18 @@
     (is (= '[{?id -50}]
            (rule/unifications '[[?id :emergency/type :emergency.type/fire]]
                               (:facts KB)
+                              {})))
+
+    (is (= '[{?id -50} {?id -1000000}]
+           (rule/unifications '[[?id :emergency/type :emergency.type/fire]]
+                              (conj all-facts [-1000000 :emergency/type :emergency.type/fire])
+                              {}))))
+  
+  (testing "that the context is built with multiple antecedent patterns"
+    (is (= '[{?id -50, ?rid -5000000}]
+           (rule/unifications '[[?id :emergency/type :emergency.type/fire]
+                                [?rid :response/to ?id]]
+                              (conj all-facts [-5000000 :response/to -50])
                               {})))))
+
+
