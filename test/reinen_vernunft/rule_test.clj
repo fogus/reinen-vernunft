@@ -64,4 +64,8 @@
                     [?from :response/to ?to]] 
                   results)))
 
-      )))
+      (is (= #{[:response.type/activate-sprinklers]}
+             (d/q '[:find ?response
+                    :where 
+                    [_ :response/type ?response]] 
+                  results))))))
