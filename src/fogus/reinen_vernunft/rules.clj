@@ -2,7 +2,8 @@
   "The simplest possible production rules system that uses a set
    of EAV tuples as its knowledge base."
   (:require [clojure.core.unify :as u]
-            [clojure.set :as s]))
+            [clojure.set :as s])
+  (:refer-clojure :exclude [cycle]))
 
 ;; Rules are represented as maps having two privileged keys:
 ;; {:antecedent ... 
