@@ -85,10 +85,10 @@
 
 (defn step 
   "Takes a set of rules and facts and returns a new fact base based on the application of single rule."
-  ([rules facts] (step rand-nth rules facts))
-  ([choice-fn rules facts]
-   (when-let [[rule binds] (select-rule choice-fn rules facts)]
-     (apply-rule rule facts binds))))
+  ([kb] (step rand-nth kb))
+  ([choice-fn kb]
+   (when-let [[rule binds] (select-rule choice-fn kb)]
+     (apply-rule rule (:facts kb) binds))))
 
 ;; Stage 3b: Repeated substitution and assertion
 
