@@ -73,4 +73,17 @@
 (deftest test-cycle
   (testing "that the whole cycle occurs as expected"
     (let [results (rule/cycle rule/naive-qf KB)]
-      results)))
+      (is (= #{[:response.type/kill-electricity] [:response.type/activate-sprinklers]}
+             (d/q '[:find ?response
+                    :where
+                    [_ :response/type ?response]]
+                  results)))
+
+      (is (= #{[:emergency.type/fire   :response.type/activate-sprinklers]
+               [:emergency.type/flood  :response.type/kill-electricity]}
+             (d/q '[:find ?problem ?response
+                    :where
+                    [?id :response/type   ?response]
+                    [?id :response/to     ?pid]
+                    [?pid :emergency/type ?problem]]
+                  results))))))
