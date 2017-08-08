@@ -57,4 +57,11 @@
   (testing "that a single step occurs as expected"
     (let [first-matching-rule (comp first identity)
           results (rule/step first-matching-rule KB)]
-      results)))
+      (is (= #{[-1000 -50]}
+             (d/q '[:find ?from ?to
+                    :where 
+                    [?to :emergency/type :emergency.type/fire]
+                    [?from :response/to ?to]] 
+                  results)))
+
+      )))
