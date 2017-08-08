@@ -1,4 +1,4 @@
-(ns reinen-vernunft.core-test
+(ns reinen-vernunft.rule-test
   (:require [clojure.test :refer :all]
             [fogus.reinen-vernunft.rules :as rule]
             [datascript.core :as d]))
@@ -53,3 +53,7 @@
                [-1000 :response/to -50]}
              (rule/apply-rule rule (:facts KB) binds))))))
 
+(deftest test-step
+  (testing "that a single step occurs as expected"
+    (let [first-matching-rule (comp first identity)
+          ])))
