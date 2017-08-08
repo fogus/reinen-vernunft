@@ -69,3 +69,8 @@
                     :where 
                     [_ :response/type ?response]] 
                   results))))))
+
+(deftest test-cycle
+  (testing "that the whole cycle occurs as expected"
+    (let [results (rule/cycle rule/naive-qf KB)]
+      results)))

@@ -96,7 +96,7 @@
   "Will apply the result of one rule firing to the fact base and feed 
    the result forward into the next firing."
   [kb] 
-  (iterate #(step (:rules kb) %)
+  (iterate #(step (assoc kb :facts %))
            (set (:facts kb))))
 
 (defn cycle 
