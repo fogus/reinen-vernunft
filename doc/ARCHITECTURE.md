@@ -23,11 +23,24 @@ The entire collection of EAV tuples refering to one or more entities should be c
 
     #{[100 :person/name "Gilbert"], [100 :person/age  42]}
 
+An EAV tuple set can be thought of as representing a relational database:
 
+    #{[100 :person/name   "Gilbert"]
+	  [100 :person/age    42]
+	  [200 :person/name   "Zippy"]
+	  [300 :person/name   "Queequeg"]
+	  [100 :person/friend 200]}
+
+In the EAV tuple set above, the `:person/friend` attribute establishes a link between two entities via their ids.
 
 ### Why EAV tuple sets?
 
+Aside from the simplicity of the data, the relational nature of the EAV tuple set is robust enough to model fairly complex domains.  In addition, there are existing libraries that can directly query EAV tuple sets:
 
+* [DataScript](https://github.com/tonsky/datascript)
+* [Datomic](http://www.datomic.com)
+
+To name only a couple.
 
 ## Logic variables
 
