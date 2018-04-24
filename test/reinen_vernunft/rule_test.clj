@@ -1,6 +1,6 @@
 (ns reinen-vernunft.rule-test
   (:require [clojure.test :refer :all]
-            [fogus.reinen-vernunft.rules :as rule]
+            [fogus.reinen-vernunft.rules.minimal :as rule]
             [datascript.core :as d]))
 
 (def rules
