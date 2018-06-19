@@ -8,7 +8,8 @@
 
 (ns fogus.reinen-vernunft.tori.kanren
   "An implementation of µKanren by Friedman and Hermann."
-  (:require [clojure.core.unify :as u])
+  (:require [clojure.core.unify :as u]
+            [fogus.reinen-vernunft.core :as core])
   (:import java.io.Writer)
   (:refer-clojure :exclude [==]))
 
