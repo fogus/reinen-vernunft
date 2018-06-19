@@ -13,3 +13,5 @@
   (:import java.io.Writer)
   (:refer-clojure :exclude [==]))
 
+(defn ? [id] (core/->LVar id))
+
