@@ -11,6 +11,6 @@ Don't.
 
 ## License
 
-Copyright © 2017 Fogus
+Copyright © 2017-2020 Fogus
 
 Distributed under the Eclipse Public License version 1.0.
