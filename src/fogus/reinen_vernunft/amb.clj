@@ -23,7 +23,7 @@
        ~ret))
 
 (defmacro amb
-  [binds & body]
+  [& [binds & body]]
   (let [{:keys [names values]} (util/process-bindings binds)]
     `(let [proc# (fn [[~@names]]
                    (try (do ~@body)
