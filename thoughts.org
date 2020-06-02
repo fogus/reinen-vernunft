@@ -1,0 +1,8 @@
+* Goals
+
+To provide a library of functional "thinking machines".
+
+* TODOs
+** Port ~amb~ to a trampoline solution.
+
+
