@@ -5,7 +5,11 @@
 (deftest test-amb-simple-binding
   (is (= 3 (rv/amb [x (range 10)]
                    (rv/accept (= x 3)
-                     x)))))
+                              x))))
+  (is (thrown-with-msg? clojure.lang.ExceptionInfo #"Options exhausted")
+      (rv/amb [x (range 10)]
+              (rv/accept false
+                         x))))
 
 (deftest test-amb-complex-binding
   (testing "that a complex binding passes as expected."
