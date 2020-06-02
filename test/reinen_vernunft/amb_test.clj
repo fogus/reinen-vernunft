@@ -2,6 +2,9 @@
   (:require [clojure.test :refer :all]
             [fogus.reinen-vernunft.amb :as rv]))
 
+(deftest test-amb-null-body
+  (is (nil? (rv/amb))))
+
 (deftest test-amb-simple-binding
   (is (= 3 (rv/amb [x (range 10)]
                    (rv/accept (= x 3)

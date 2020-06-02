@@ -24,17 +24,18 @@
 
 (defmacro amb
   [& [binds & body]]
-  (let [{:keys [names values]} (util/process-bindings binds)]
-    `(let [proc# (fn [[~@names]]
-                   (try (do ~@body)
-                        (catch clojure.lang.ExceptionInfo e#
-                          (ex-data e#))))
-           vals# (cart ~values)]
-       (loop [[v# & vs#] vals#]
-         (let [result# (proc# v#)]
-           (if (::backtrack result#)
-             (when (seq vs#)
-               (recur vs#))
-             result#))))))
+  (when (and binds body)
+    (let [{:keys [names values]} (util/process-bindings binds)]
+      `(let [proc# (fn [[~@names]]
+                     (try (do ~@body)
+                          (catch clojure.lang.ExceptionInfo e#
+                            (ex-data e#))))
+             vals# (cart ~values)]
+         (loop [[v# & vs#] vals#]
+           (let [result# (proc# v#)]
+             (if (::backtrack result#)
+               (when (seq vs#)
+                 (recur vs#))
+               result#)))))))
 
 
