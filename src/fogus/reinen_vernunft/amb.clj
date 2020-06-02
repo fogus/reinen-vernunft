@@ -6,12 +6,35 @@
 ;   the terms of this license.
 ;   You must not remove this notice, or any other, from this software.
 
-(ns fogus.reinen-vernunft.amb)
+(ns fogus.reinen-vernunft.amb
+  (:require [fogus.reinen-vernunft.util :as util]))
 
-(defn- cart [colls]
+(defn cart [colls]
   (if (empty? colls)
     '(())
     (for [more (cart (rest colls))
           x (first colls)]
       (cons x more))))
+
+(defmacro accept [condition ret]
+  `(do (when (not ~condition)
+         (throw (ex-info "Failing" {::failure   '~condition
+                                    ::backtrack true})))
+       ~ret))
+
+(defmacro amb
+  [binds & body]
+  (let [{:keys [names values]} (util/process-bindings binds)]
+    `(let [proc# (fn [[~@names]]
+                   (try (do ~@body)
+                        (catch clojure.lang.ExceptionInfo e#
+                          (ex-data e#))))
+           vals# (cart ~values)]
+       (loop [[v# & vs#] vals#]
+         (let [result# (proc# v#)]
+           (if (::backtrack result#)
+             (when (seq vs#)
+               (recur vs#))
+             result#))))))
+
 
