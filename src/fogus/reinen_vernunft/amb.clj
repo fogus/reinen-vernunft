@@ -43,8 +43,8 @@
    to a `<condition>` and return an `<expression>` that serves as the
    return value of the call to `amb`.
 
-   A call to amb without bindings an a body will exhaust immediately
-   and thus result in `nil` as its value."
+   A call to `(amb)` (i.e. without bindings and body) will exhaust
+   immediately and thus result in `nil` as its value."
   [& [binds & body]]
   (when (and binds body)
     (let [{:keys [names values]} (util/process-bindings binds)]
