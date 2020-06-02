@@ -7,6 +7,8 @@
 ;   You must not remove this notice, or any other, from this software.
 
 (ns fogus.reinen-vernunft.amb
+  "Provides an implementation of McCarthy's `amb` operator with
+   binding forms and acceptance test operator."
   (:require [fogus.reinen-vernunft.util :as util]))
 
 (defn cart [colls]
@@ -23,6 +25,23 @@
        ~ret))
 
 (defmacro amb
+  "A macro that provides a non-deterministic way to traverse a space
+   and find a single solution amongst potentially many. If the search
+   space is exhausted then `amb` will return `nil`. The general form
+   of `amb` is as follows:
+
+      (amb <bindings> <execution body>)
+
+   Where `<bindings>` is a typical Clojure bindings form:
+
+      [<name1> <value1> ... <nameN> <valueN>]
+
+   And `<execution body>` is one or more Clojure expressions.
+
+   Within the execution body the `(accept <condition> <expression>)`
+   form is used to test some combination of the bindings for adherence
+   to a `<condition>` and return an `<expression>` that serves as the
+   return value of the call to `amb`."
   [& [binds & body]]
   (when (and binds body)
     (let [{:keys [names values]} (util/process-bindings binds)]
