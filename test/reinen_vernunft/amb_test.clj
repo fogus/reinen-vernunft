@@ -8,13 +8,24 @@
                      x)))))
 
 (deftest test-amb-complex-binding
-  (is (= ["that" "thing" "grows" "slowly"]
-         (rv/amb [A ["the" "that" "a"]
-                  B ["frog" "elephant" "thing"]
-                  C ["walked" "treaded" "grows"]
-                  D ["slowly" "quickly"]]
-                 
-                 (rv/accept (and (= (last A) (first B))
-                                 (= (last B) (first C))
-                                 (= (last C) (first D)))
-                   [A B C D])))))
+  (testing "that a complex binding passes as expected."
+    (is (= ["that" "thing" "grows" "slowly"]
+           (rv/amb [A ["the" "that" "a"]
+                    B ["frog" "elephant" "thing"]
+                    C ["walked" "treaded" "grows"]
+                    D ["slowly" "quickly"]]
+                   
+                   (rv/accept (and (= (last A) (first B))
+                                   (= (last B) (first C))
+                                   (= (last C) (first D)))
+                              [A B C D])))))
+
+  (testing "that a complex binding fails when an imposible condition is present."
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo #"Options exhausted"
+           (rv/amb [A ["the" "that" "a"]
+                    B ["frog" "elephant" "thing"]
+                    C ["walked" "treaded" "grows"]
+                    D ["slowly" "quickly"]]
+                   
+                   (rv/accept false [A B C D])))))
+  )
