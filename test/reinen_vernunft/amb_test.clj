@@ -6,10 +6,9 @@
   (is (= 3 (rv/amb [x (range 10)]
                    (rv/accept (= x 3)
                               x))))
-  (is (thrown-with-msg? clojure.lang.ExceptionInfo #"Options exhausted")
-      (rv/amb [x (range 10)]
-              (rv/accept false
-                         x))))
+  (is (nil? (rv/amb [x (range 10)]
+                    (rv/accept false
+                               x)))))
 
 (deftest test-amb-complex-binding
   (testing "that a complex binding passes as expected."
@@ -25,11 +24,9 @@
                               [A B C D])))))
 
   (testing "that a complex binding fails when an imposible condition is present."
-    (is (thrown-with-msg? clojure.lang.ExceptionInfo #"Options exhausted"
-           (rv/amb [A ["the" "that" "a"]
-                    B ["frog" "elephant" "thing"]
-                    C ["walked" "treaded" "grows"]
-                    D ["slowly" "quickly"]]
-                   
-                   (rv/accept false [A B C D])))))
-  )
+    (is (nil? (rv/amb [A ["the" "that" "a"]
+                       B ["frog" "elephant" "thing"]
+                       C ["walked" "treaded" "grows"]
+                       D ["slowly" "quickly"]]
+                      
+                      (rv/accept false [A B C D]))))))
