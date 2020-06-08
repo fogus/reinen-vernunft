@@ -71,8 +71,18 @@
                               [(total-cost newcost step-est size y x) w]))
                           nbr-yxs)))))))))
 
+(def shrubs [[1 1 1 2   1]
+             [1 1 1 999 1]
+             [1 1 1 999 1]
+             [1 1 2 999 1]
+             [1 1 1 1   1]])
+
 (comment
 
   (astar [0 0] 900 world)
 
+  (astar [0 0] 900 shrubs)
+
 )
+
+
