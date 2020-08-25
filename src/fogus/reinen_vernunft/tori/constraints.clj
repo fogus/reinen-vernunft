@@ -10,16 +10,17 @@
   "A simple constraints solver."
   (:require [fogus.reinen-vernunft.core :as core]
             [fogus.reinen-vernunft.util :as util]
-            [clojure.core.unify         :as unify]))
+            [clojure.core.unify         :as unify]
+            [evalive.core               :as live]))
 
 (defrecord variable   [name domain])
 (defrecord constraint [variables formula])
 (defrecord cpair      [name value])
 
-(def cnstr (->constraint [(->variable :x [0 1])
-                          (->variable :y [0 1])
-                          (->variable :z [0 1])]
-                         '(= (+ x y) z)))
+(def cnstr (->constraint [(->variable '?x [0 1])
+                          (->variable '?y [0 1])
+                          (->variable '?z [0 1])]
+                         '(= (+ ?x ?y) ?z)))
 
 (defn get-all-pairs [c]
   (let [vars     (:variables c)
@@ -28,11 +29,17 @@
     (map #(map ->cpair varnames %) tuples)))
 
 (defn test-pair [f p]
-  (cond (= p []) nil))
+  (cond (= p []) (live/evil {} f)
+        :else (let [current-pair    (first p)
+                    remaining-pairs (rest p)]
+                (test-pair (unify/subst f {(:name current-pair) (:value current-pair)})
+                           remaining-pairs))))
 
 (comment
 
   (get-all-pairs cnstr)
 
+  (live/evil '{message "Hello", place "Cleveland"}
+             '(vector message place))
 )
 
