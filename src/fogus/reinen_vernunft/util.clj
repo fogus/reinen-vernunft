@@ -11,3 +11,10 @@
 (defn process-bindings [bindings]
   {:names  (take-nth 2 bindings)
    :values (vec (take-nth 2 (rest bindings)))})
+
+(defn cart [colls]
+  (if (empty? colls)
+    '(())
+    (for [more (cart (rest colls))
+          x (first colls)]
+      (cons x more))))

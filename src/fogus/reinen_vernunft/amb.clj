@@ -11,13 +11,6 @@
    binding forms and acceptance test operator."
   (:require [fogus.reinen-vernunft.util :as util]))
 
-(defn cart [colls]
-  (if (empty? colls)
-    '(())
-    (for [more (cart (rest colls))
-          x (first colls)]
-      (cons x more))))
-
 (defmacro accept [condition ret]
   `(do (when (not ~condition)
          (throw (ex-info "Failing" {::failure   '~condition
@@ -52,7 +45,7 @@
                      (try (do ~@body)
                           (catch clojure.lang.ExceptionInfo e#
                             (ex-data e#))))
-             vals# (cart ~values)]
+             vals# (util/cart ~values)]
          (loop [[v# & vs#] vals#]
            (let [result# (proc# v#)]
              (if (::backtrack result#)

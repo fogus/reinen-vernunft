@@ -8,9 +8,27 @@
 
 (ns fogus.reinen-vernunft.tori.constraints
   "A simple constraints solver."
-  (:require [fogus.reinen-vernunft.core :as core]))
+  (:require [fogus.reinen-vernunft.core :as core]
+            [fogus.reinen-vernunft.util :as util]))
 
 (defrecord variable   [name domain])
 (defrecord constraint [variables formula])
 (defrecord cpair      [name value])
+
+(def cnstr (->constraint [(->variable :x [0 1])
+                          (->variable :y [0 1])
+                          (->variable :z [0 1])]
+                         '(= (+ x y) z)))
+
+(defn get-all-pairs [c]
+  (let [vars     (:variables c)
+        varnames (map :name vars)
+        tuples   (util/cart (map :domain vars))]
+    varnames))
+
+(comment
+
+  (get-all-pairs cnstr)
+
+)
 
