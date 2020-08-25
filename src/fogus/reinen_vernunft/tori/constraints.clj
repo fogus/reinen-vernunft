@@ -10,5 +10,7 @@
   "A simple constraints solver."
   (:require [fogus.reinen-vernunft.core :as core]))
 
-
+(defrecord variable   [name domain])
+(defrecord constraint [variables formula])
+(defrecord cpair      [name value])
 
