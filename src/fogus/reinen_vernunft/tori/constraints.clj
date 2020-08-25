@@ -6,23 +6,9 @@
 ;   the terms of this license.
 ;   You must not remove this notice, or any other, from this software.
 
-(ns fogus.reinen-vernunft.core
-  (:import java.io.Writer))
+(ns fogus.reinen-vernunft.tori.constraints
+  "A simple constraints solver."
+  (:require [fogus.reinen-vernunft.core :as core]))
 
-;; Logic variables
 
-(deftype LVar [id]
-  Object
-  (equals [this other]
-    (if (instance? LVar other) 
-      (= (.-id this)
-         (.-id other))
-      false))
-  (toString [this]
-    (str "_." id)))
-
-(def lv? #(instance? LVar %))
-
-(defmethod print-method LVar [lvar ^Writer writer]
-  (.write writer (str lvar)))
 
