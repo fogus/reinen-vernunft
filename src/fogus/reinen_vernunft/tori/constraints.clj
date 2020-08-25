@@ -9,7 +9,8 @@
 (ns fogus.reinen-vernunft.tori.constraints
   "A simple constraints solver."
   (:require [fogus.reinen-vernunft.core :as core]
-            [fogus.reinen-vernunft.util :as util]))
+            [fogus.reinen-vernunft.util :as util]
+            [clojure.core.unify         :as unify]))
 
 (defrecord variable   [name domain])
 (defrecord constraint [variables formula])
@@ -25,6 +26,9 @@
         varnames (map :name vars)
         tuples   (util/cart (map :domain vars))]
     (map #(map ->cpair varnames %) tuples)))
+
+(defn test-pair [f p]
+  (cond (= p []) nil))
 
 (comment
 
