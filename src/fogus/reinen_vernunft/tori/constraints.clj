@@ -35,9 +35,20 @@
                 (test-pair (unify/subst f {(:name current-pair) (:value current-pair)})
                            remaining-pairs))))
 
+(defn find-sat [c]
+  (letfn [(go [f ps]
+              (cond (nil? ps) []
+                    (test-pair f (first ps)) (first ps)
+                    :else (go f (rest ps))))]
+    (let [formula (:formula c)
+          pairs   (get-all-pairs c)]
+      (go formula pairs))))
+
 (comment
 
   (get-all-pairs cnstr)
+
+  (find-sat cnstr)
 
   (live/evil '{message "Hello", place "Cleveland"}
              '(vector message place))
