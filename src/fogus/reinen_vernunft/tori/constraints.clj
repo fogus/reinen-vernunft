@@ -24,7 +24,7 @@
   (let [vars     (:variables c)
         varnames (map :name vars)
         tuples   (util/cart (map :domain vars))]
-    varnames))
+    (map #(map ->cpair varnames %) tuples)))
 
 (comment
 
