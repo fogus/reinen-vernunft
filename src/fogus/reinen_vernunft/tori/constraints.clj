@@ -17,11 +17,6 @@
 (defrecord constraint [variables formula])
 (defrecord cpair      [name value])
 
-(def cnstr (->constraint [(->variable '?x [0 1])
-                          (->variable '?y [0 1])
-                          (->variable '?z [0 1])]
-                         '(= (+ ?x ?y) ?z)))
-
 (defn get-all-pairs [c]
   (let [vars     (:variables c)
         varnames (map :name vars)
@@ -43,14 +38,4 @@
     (let [formula (:formula c)
           pairs   (get-all-pairs c)]
       (go formula pairs))))
-
-(comment
-
-  (get-all-pairs cnstr)
-
-  (find-sat cnstr)
-
-  (live/evil '{message "Hello", place "Cleveland"}
-             '(vector message place))
-)
 
