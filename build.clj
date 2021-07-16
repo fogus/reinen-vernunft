@@ -16,6 +16,7 @@
   (b/write-pom {:class-dir class-dir
                 :lib lib
                 :version version
+                :src-pom "pom.xml"
                 :basis basis
                 :src-dirs src})
   (b/copy-dir {:src-dirs src
