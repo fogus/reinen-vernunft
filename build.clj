@@ -13,9 +13,12 @@
 (defn clean
   "Delete the build target directory"
   [_]
+  (println (str "Cleaning " target-dir))
   (b/delete {:path target-dir}))
 
-(defn jar [_]
+(defn jar
+  "Create the jar from a source pom and source files"
+  [_]
   (b/write-pom {:class-dir class-dir
                 :lib lib
                 :version version
