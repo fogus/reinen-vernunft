@@ -3,8 +3,7 @@
   :url "https://github.com/fogus/reinen-vernunft"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.10.1"]
-                 [org.clojure/spec.alpha "0.2.187"]
+  :dependencies [[org.clojure/clojure "1.11.0-alpha1"]
                  [org.clojure/core.unify "0.5.7"]
                  [evalive "1.1.0"]]
-  :profiles {:dev {:dependencies [[datascript "0.18.13"]]}})
+  :profiles {:dev {:dependencies [[datascript "1.2.2"]]}})
