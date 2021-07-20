@@ -9,8 +9,17 @@ Explorations and conversations regrading pure reason using Clojure.  Currently, 
 
 Don't.
 
+## Testing
+
+    clj -X:dev:test
+
+## TODO
+
+- [ ] Port old impls from Forbus' *[Building Problem Solvers](https://www.amazon.com/gp/product/0262061570/?tag=fogus-20)*
+- [ ] Find old datalog impl.
+
 ## License
 
-Copyright © 2017-2020 Fogus
+Copyright © 2017-2021 Fogus
 
 Distributed under the Eclipse Public License version 1.0.
