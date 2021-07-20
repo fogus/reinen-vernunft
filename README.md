@@ -16,7 +16,8 @@ Don't.
 ## TODO
 
 - [ ] Port old impls from Forbus' *[Building Problem Solvers](https://www.amazon.com/gp/product/0262061570/?tag=fogus-20)*
-- [ ] Find old datalog impl.
+- [ ] Find old datalog impl
+- [ ] Port ~amb~ to a trampoline solution
 
 ## License
 
