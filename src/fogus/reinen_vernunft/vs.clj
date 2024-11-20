@@ -28,12 +28,6 @@
               lhs
               rhs)))
 
-(defn includes? [a b]
-  (or (= a b) (= a G?)))
-
-(defn more-general? [a b]
-  (every? true? (map includes? a b)))
-
 (defn- specialize-at-position [g s pos]
   (if (= pos 0)
     (cons (first s) (rest g))
@@ -53,9 +47,6 @@
    (fn [pos] (-wrap g (specialize-at-position g s pos)))
    (get-potential-positions g neg s)))
 
-(defn- init-version-space [basis domain]
-  )
-
 (extend-protocol S&G
   clojure.lang.PersistentVector
   (-wrap [_ coll] (into [] coll))
@@ -63,16 +54,18 @@
   (-specialize [lhs neg rhs] (specialize-sequence lhs neg rhs))
   (-init [tmpl]
     (let [d (count tmpl)]
-      {:S (into (-wrap [] []) (repeat d S?))
-       :G (into (-wrap [] []) (repeat d G?))
+      {:S [(into (-wrap [] []) (repeat d S?))]
+       :G [(into (-wrap [] []) (repeat d G?))]
        :domain d})))
 
 (comment
   (-generalize [] [:a :b])
   (-generalize [:a] [:a])
   (-generalize [S?] [:a])
+  (-generalize [:a S?] [:a :b])
   (-generalize [:b] [S?])
   (-generalize [:a] [:b])
+  (-generalize [:a :b] [:z :b])
 
   (get-potential-positions [:round G?] [:round :yellow] [:round :blue])
   
@@ -83,3 +76,29 @@
   (-init '[? ? ?])
 )
 
+(defn- includes? [a b]
+  (or (= a b) (= a G?)))
+
+(defn- more-general? [a b]
+  (every? true? (map includes? a b)))
+
+(defn- positive [{:keys [S G domain]} example]
+  (println [G example])
+  {:G (filter #(more-general? %1 example) G)
+   
+   :S (filter
+       (fn [s] (not-any? #(more-general? s %1) G))
+       (map (fn [s]
+              (if (not (more-general? s example))
+                (-generalize s example)
+                s))
+            S))
+   :domain domain})
+
+(comment
+
+  (-> (-init '[? ? ?])
+      (positive [:vocal :jazz 50])
+      (negative [:band  :pop  70]))
+
+)
