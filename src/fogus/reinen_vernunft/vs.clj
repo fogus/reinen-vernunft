@@ -93,12 +93,45 @@
                 (-generalize s example)
                 s))
             S))
+
+   :domain domain})
+
+(defn- negative [{:keys [S G domain]} example]
+  {:G (reduce (fn [acc g]
+                (if (not (more-general? g example))
+                  (concat acc (list g))
+                  (concat acc
+                          (reduce (fn [acc new_g]
+                                    (if (and
+                                         (not (more-general? new_g example))
+                                         (every? (fn [pe]
+                                                   more-general? new_g pe)
+                                                 S)
+                                         (not-any? (fn [other_g]
+                                                     (and
+                                                      (not (= g other_g))
+                                                      (more-general? other_g new_g)))
+                                                   G))
+                                      (concat acc (list new_g))
+                                      acc))
+                                  '()
+                                  (-specialize g example (first S))))))
+              '()
+              G)
+
+   :S (filter #(not (more-general? %1 example)) S)
+
    :domain domain})
 
 (comment
 
   (-> (-init '[? ? ?])
       (positive [:vocal :jazz 50])
-      (negative [:band  :pop  70]))
-
+      (negative [:band :pop  70])
+      (negative [:band :pop  80])
+      (negative [:solo :jazz 40])
+      (positive [:vocal :jazz 50])
+      (negative [:orchestra :classical 100])
+      (positive [:vocal :jazz 70]))
+  
 )
