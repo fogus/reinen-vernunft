@@ -9,13 +9,13 @@ Explorations and conversations regarding pure reason using Clojure.  Currently, 
 
 ### deps.edn
 
-    me.fogus/reinen-vernunft {:mvn/version "0.2.0"}
+    me.fogus/reinen-vernunft {:mvn/version "0.0.2"}
 
 ### Leiningen
 
 Modify your [Leiningen](http://github.com/technomancy/leiningen) dependencies to include [reinen-vernunft](http://fogus.me/fun/reinen-vernunft/):
 
-    :dependencies [[me.fogus/reinen-vernunft "0.2.0"] ...]    
+    :dependencies [[me.fogus/reinen-vernunft "0.0.2"] ...]    
 
 ### Maven
 
@@ -24,7 +24,7 @@ Add the following to your `pom.xml` file:
     <dependency>
       <groupId>me.fogus</groupId>
       <artifactId>reinen-vernunft</artifactId>
-      <version>0.2.0</version>
+      <version>0.0.2</version>
     </dependency>
 
 ## Dev Testing

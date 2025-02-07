@@ -4,7 +4,7 @@
   <packaging>jar</packaging>
   <groupId>me.fogus</groupId>
   <artifactId>reinen-vernunft</artifactId>
-  <version>0.2.0</version>
+  <version>0.0.2</version>
   <name>reinen-vernunft</name>
   <dependencies>
     <dependency>
