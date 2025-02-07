@@ -4,7 +4,8 @@ Explorations and code conversations regarding pure reason using Clojure.  Curren
 
 * [fogus.reinen-vernunft.rules](https://github.com/fogus/reinen-vernunft/blob/master/src/fogus/reinen_vernunft/rules.clj) - simplest possible production rules (more information in [Read-Eval-Print-λove v004](https://leanpub.com/readevalprintlove004))
 * McCarthy's amb
-* A* search algorithm
+
+Anything else not listed above is WiP.
 
 ## Including
 

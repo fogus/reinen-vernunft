@@ -1,6 +1,8 @@
 (ns fogus.reinen-vernunft.search.astar
   "A* search implementation.")
 
+;; WIP
+
 (def world [[  1   1   1   1   1]
             [999 999 999 999   1]
             [  1   1   1   1   1]
