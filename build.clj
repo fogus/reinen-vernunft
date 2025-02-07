@@ -9,7 +9,9 @@
 (def jar-file (format "target/%s.jar" (name lib)))
 
 ;; delay to defer side effects (artifact downloads)
-(def basis (delay (b/create-basis {:project "deps.edn"})))
+(def basis (delay (-> {:project "deps.edn"}
+                      b/create-basis
+                      (update-in [:libs] dissoc 'org.clojure/clojure))))
 
 (defn clean [_]
   (b/delete {:path "target"}))
