@@ -3,24 +3,36 @@
 Explorations and conversations regarding pure reason using Clojure.  Currently, I've implemented the following:
 
 * [fogus.reinen-vernunft.rules](https://github.com/fogus/reinen-vernunft/blob/master/src/fogus/reinen_vernunft/rules.clj) - simplest possible production rules (more information in [Read-Eval-Print-λove v004](https://leanpub.com/readevalprintlove004))
+* McCarthy's amb
 
+## Including
 
-## Usage
+### deps.edn
 
-Don't.
+    me.fogus/reinen-vernunft {:mvn/version "0.2.0"}
 
-## Testing
+### Leiningen
+
+Modify your [Leiningen](http://github.com/technomancy/leiningen) dependencies to include [reinen-vernunft](http://fogus.me/fun/reinen-vernunft/):
+
+    :dependencies [[me.fogus/reinen-vernunft "0.2.0"] ...]    
+
+### Maven
+
+Add the following to your `pom.xml` file:
+
+    <dependency>
+      <groupId>me.fogus</groupId>
+      <artifactId>reinen-vernunft</artifactId>
+      <version>0.2.0</version>
+    </dependency>
+
+## Dev Testing
 
     clj -X:dev:test
 
-## TODO
-
-- [ ] Port old impls from Forbus' *[Building Problem Solvers](https://www.amazon.com/gp/product/0262061570/?tag=fogus-20)*
-- [ ] Find old datalog impl
-- [ ] Port ~amb~ to a trampoline solution
-
 ## License
 
-Copyright © 2017-2021 Fogus
+Copyright © 2017-2025 Fogus
 
 Distributed under the Eclipse Public License version 1.0.
