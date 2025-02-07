@@ -58,12 +58,13 @@
 (defn q
   ([query db] (q query db '()))
   ([query db rules]
-   (let [qm (->> query
-                 (partition-by #(when (keyword? %) %))
+   (let [qq (->> query
+                 (partition-by keyword?)
                  (partition 2)
                  (map (fn [[[k] v]] [k v]))
-                 (into {}))
-         qq (list* (:find qm) (:where qm))]
+                 (into {})
+                 ((juxt :find :where))
+                 (apply list*))]
      (q* db qq rules))))
 
 (comment
@@ -94,6 +95,5 @@
        [?pid :emergency/type ?problem]]
      fdb)
 )
-
 
 
