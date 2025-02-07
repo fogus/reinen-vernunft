@@ -26,12 +26,3 @@
 (defmethod print-method LVar [lvar ^Writer writer]
   (.write writer (str lvar)))
 
-(comment
-
-  (update-keys name {:a 1 :b 2})
-  (update-vals inc  {:a 1 :b 2})
-
-  (update-keys2 name {:a 1 :b 2})
-  (update-vals2 inc  {:a 1 :b 2})
-
-)
