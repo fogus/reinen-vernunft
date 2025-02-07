@@ -9,9 +9,7 @@
 (def jar-file (format "target/%s.jar" (name lib)))
 
 ;; delay to defer side effects (artifact downloads)
-(def basis (delay (-> {:project "deps.edn"}
-                      b/create-basis
-                      (update-in [:libs] dissoc 'org.clojure/clojure))))
+(def basis (delay (b/create-basis{:project "deps.edn"})))
 
 (defn clean [_]
   (b/delete {:path "target"}))
@@ -20,7 +18,7 @@
   (b/write-pom {:class-dir class-dir
                 :lib lib
                 :version version
-                :basis @basis
+                :basis (update-in @basis [:libs] dissoc 'org.clojure/clojure)
                 :src-dirs ["src"]})
   (b/copy-dir {:src-dirs ["src" "resources"]
                :target-dir class-dir})
