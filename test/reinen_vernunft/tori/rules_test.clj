@@ -1,7 +1,7 @@
 (ns reinen-vernunft.tori.rules-test
   (:require [clojure.test :refer :all]
             [fogus.reinen-vernunft.tori.rules :as rule]
-            [datascript.core :as d]))
+            [fogus.reinen-vernunft.tori.datalog :as d]))
 
 (def rules
   '[{:antecedent   [[?id   :emergency/type :emergency.type/fire]]
