@@ -52,31 +52,48 @@
           dfacts' (into #{} (comp (mapcat #(match-rule dfacts facts %)) (remove facts')) rules)]
       (cond->> facts' (seq dfacts') (recur dfacts')))))
 
-(defn q [facts query rules]
+(defn q* [facts query rules]
   (-> facts (saturate rules) (match-rule #{} query) set))
 
-(comment
-  (def edb
-    #{[:father :bart :homer]
-      [:mother :bart :marge]
-      [:father :lisa :homer]
-      [:mother :lisa :marge]
-      [:father :maggie :homer]
-      [:mother :maggie :marge]
-      [:father :homer :abe]
-      [:mother :homer :mona]})
+(defn q
+  ([query db] (q query db '()))
+  ([query db rules]
+   (let [qm (->> query
+                 (partition-by #(when (keyword? %) %))
+                 (partition 2)
+                 (map (fn [[[k] v]] [k v]))
+                 (into {}))
+         qq (list* (:find qm) (:where qm))]
+     (q* db qq rules))))
 
-  (def rules
-    '[([:parent c p] [:father c p])
-      ([:parent c p] [:mother c p])
-      ([:grand-parent c gp] [:parent p gp] [:parent c p])
-      ([:ancestor c p] [:parent c p])
-      ([:ancestor c ancp] [:ancestor c anc] [:parent anc ancp])])
-  
-  (q edb
-     '([s] [:sibling :bart s])
-     '[([:parent c p] [:father c p])
-       ([:parent c p] [:mother c p])
-       ([:sibling c c'] [:parent c p] (not= c c') [:parent c' p])])
-  
+(comment
+
+  (def fdb
+    #{[-1002 :response/to -51]
+      [-51 :emergency/type :emergency.type/flood]
+      [-50 :emergency/type :emergency.type/fire]
+      [-1002 :response/type :response.type/kill-electricity]
+      [-1000 :response/to -50]
+      [-1000 :response/type :response.type/activate-sprinklers]})
+
+  (q* fdb
+     '([?response] [_ :response/type ?response])
+     '())
+
+  (q* fdb
+     '([?problem ?response]
+       [?id :response/type   ?response]
+       [?id :response/to     ?pid]
+       [?pid :emergency/type ?problem])
+     '())
+
+  (q '[:find ?problem ?response
+       :where
+       [?id :response/type   ?response]
+       [?id :response/to     ?pid]
+       [?pid :emergency/type ?problem]]
+     fdb)
 )
+
+
+
