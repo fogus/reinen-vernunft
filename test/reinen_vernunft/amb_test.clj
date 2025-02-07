@@ -11,6 +11,9 @@
                               x))))
   (is (nil? (rv/amb [x (range 10)]
                     (rv/accept false
+                               x))))
+  (is (nil? (rv/amb [x (range 10)]
+                    (rv/accept (> x 10)
                                x)))))
 
 (deftest test-amb-complex-binding
