@@ -11,7 +11,7 @@
   (:require [fogus.reinen-vernunft.core :as core]
             [fogus.reinen-vernunft.util :as util]
             [clojure.core.unify         :as unify]
-            [evalive.core               :as live]))
+            [fogus.evalive              :as live]))
 
 (defrecord variable   [name domain])
 (defrecord constraint [variables formula])
