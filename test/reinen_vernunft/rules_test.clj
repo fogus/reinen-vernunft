@@ -1,6 +1,6 @@
-(ns reinen-vernunft.tori.rules-test
+(ns reinen-vernunft.rules-test
   (:require [clojure.test :refer :all]
-            [fogus.reinen-vernunft.tori.rules :as rule]
+            [fogus.reinen-vernunft.rules :as rule]
             [datascript.core :as d]))
 
 (def rules

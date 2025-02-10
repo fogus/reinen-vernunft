@@ -1,6 +1,6 @@
-(ns reinen-vernunft.tori.constraint-test
+(ns reinen-vernunft.wip.constraint-test
   (:require [clojure.test :refer :all]
-            [fogus.reinen-vernunft.tori.constraints :as c]))
+            [fogus.reinen-vernunft.wip.constraints :as c]))
 
 (deftest solve-tests1
   (let [c1 (c/->constraint [(c/->variable '?x [0 1])

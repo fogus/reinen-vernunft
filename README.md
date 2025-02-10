@@ -1,11 +1,6 @@
 # reinen-vernunft
 
-Explorations and code conversations regarding pure reason using Clojure.  Currently, I've implemented the following:
-
-* [fogus.reinen-vernunft.rules](https://github.com/fogus/reinen-vernunft/blob/master/src/fogus/reinen_vernunft/rules.clj) - simplest possible production rules (more information in [Read-Eval-Print-λove v004](https://leanpub.com/readevalprintlove004))
-* McCarthy's amb
-
-Anything else not listed above is WiP.
+Explorations in pure reasoning algorithms with Clojure.
 
 ## Including
 
@@ -29,7 +24,9 @@ Add the following to your `pom.xml` file:
       <version>0.0.2</version>
     </dependency>
 
-## Dev Testing
+## Dev
+
+Namespaces under the wip sub-ns are works in progress and should only be used for experimentation. It is expected that these implementations will change frequently and may disappear altogether.
 
     clj -X:dev:test
 
@@ -37,4 +34,4 @@ Add the following to your `pom.xml` file:
 
 Copyright © 2017-2025 Fogus
 
-Distributed under the Eclipse Public License version 1.0.
+Distributed under the Eclipse Public License version 2.0

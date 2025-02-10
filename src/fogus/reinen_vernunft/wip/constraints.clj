@@ -8,7 +8,7 @@
 
 ;; WIP
 
-(ns fogus.reinen-vernunft.tori.constraints
+(ns fogus.reinen-vernunft.wip.constraints
   "A simple constraints solver."
   (:require [fogus.reinen-vernunft.core :as core]
             [fogus.reinen-vernunft.util :as util]
