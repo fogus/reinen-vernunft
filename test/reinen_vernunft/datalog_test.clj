@@ -1,6 +1,6 @@
-(ns reinen-vernunft.tori.datalog-test
+(ns reinen-vernunft.datalog-test
   (:require [clojure.test :refer :all]
-            [fogus.reinen-vernunft.tori.datalog :as d]))
+            [fogus.reinen-vernunft.datalog :as d]))
 
 (deftest test-datalog-q*-no-rules
   (let [fdb #{[-1002 :response/to -51]

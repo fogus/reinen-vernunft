@@ -1,7 +1,7 @@
 (ns reinen-vernunft.rules-test
   (:require [clojure.test :refer :all]
             [fogus.reinen-vernunft.rules :as rule]
-            [datascript.core :as d]))
+            [fogus.reinen-vernunft.datalog :as d]))
 
 (def rules
   '[{:antecedent   [[?id   :emergency/type :emergency.type/fire]]
