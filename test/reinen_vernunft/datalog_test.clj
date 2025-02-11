@@ -20,7 +20,25 @@
                    [?id :response/type   ?response]
                    [?id :response/to     ?pid]
                    [?pid :emergency/type ?problem])
-                 '())))))
+                 '())))
+
+    (is (= #{[:response.type/activate-sprinklers :response/to :emergency.type/fire]
+             [:response.type/kill-electricity :response/to :emergency.type/flood]}
+           (d/q* fdb
+                 '([?response :response/to ?problem]
+                   [?id :response/type   ?response]
+                   [?id :response/to     ?pid]
+                   [?pid :emergency/type ?problem])
+                 '())))
+
+    (is (= #{[:response.type/activate-sprinklers :response/to :emergency.type/fire]
+             [:response.type/kill-electricity :response/to :emergency.type/flood]}
+           (d/q '[:find [?response :response/to ?problem]
+                  :where
+                  [?id :response/type   ?response]
+                  [?id :response/to     ?pid]
+                  [?pid :emergency/type ?problem]]
+                fdb)))))
 
 (deftest test-datalog-ops
   (let [ndb #{[0 :a/num 0]

@@ -69,15 +69,13 @@
 (defn q
   ([query db] (q query db '()))
   ([query db rules]
-   (q* db
-       (->> query
-            query->map
-            ((juxt :find :where))
-            (apply list*))
-       rules)))
+   (let [{:keys [find where]} (query->map query)
+         find (if (vector? (first find)) (first find) find)]
+     (q* db
+         (list* find where)
+         rules))))
 
 (comment
-
   (def fdb
     #{[-1002 :response/to -51]
       [-51 :emergency/type :emergency.type/flood]
@@ -107,6 +105,12 @@
   
 
   (query->map '[:find ?problem ?response
+                :where
+                [?id :response/type   ?response]
+                [?id :response/to     ?pid]
+                [?pid :emergency/type ?problem]])
+
+  (query->map '[:find [?response :response/to ?problem]
                 :where
                 [?id :response/type   ?response]
                 [?id :response/to     ?pid]
