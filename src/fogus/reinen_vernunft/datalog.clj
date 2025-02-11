@@ -17,11 +17,11 @@
       (set? p-or-v) (reduce constrain (assoc env p v) p-or-v))))
 
 (defn match [pattern fact env]
-  (println :----> (map vector pattern fact))
-  (when (= (count pattern) (count fact))
-    (reduce (fn [env [p v]] (or (bind env p v) (reduced nil)))
-            env
-            (map vector pattern fact))))
+  ;;(println :----> (map vector pattern fact))
+  (assert (= (count pattern) (count fact)) "[e a v] pattern expected.")
+  (reduce (fn [env [p v]] (or (bind env p v) (reduced nil)))
+          env
+          (map vector pattern fact)))
 
 (defn match-patterns [patterns dfacts facts]
   (reduce
