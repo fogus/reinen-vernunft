@@ -11,13 +11,13 @@
     <= <=
     >= >=))
 
-(defn constrain [env [op & args]]
+(defn- constrain [env [op & args]]
   (let [args (map #(let [v (env % %)] (if (set? v) % v)) args)]
     (if-some [free-var (->> args (filter symbol?) first)]
       (update env free-var (fnil conj #{}) (cons op args))
       (when (apply (lookup-op op) args) env))))
 
-(defn bind [env p v]
+(defn- bind [env p v]
   (let [p-or-v (env p p)]
     (cond
       (= p '_) env
@@ -25,13 +25,13 @@
       (symbol? p-or-v) (assoc env p v)
       (set? p-or-v) (reduce constrain (assoc env p v) p-or-v))))
 
-(defn match [pattern fact env]
+(defn- match [pattern fact env]
   (assert (= (count pattern) (count fact) 3) "[e a v] pattern expected.")
   (reduce (fn [env [p v]] (or (bind env p v) (reduced nil)))
           env
           (map vector pattern fact)))
 
-(defn match-patterns [patterns dfacts facts]
+(defn- match-patterns [patterns dfacts facts]
   (reduce
     (fn [[envs denvs] pattern]
       (if (seq? pattern)
@@ -45,11 +45,11 @@
            (disj nil))]))
     [(delay #{{}}) #{}] patterns))
 
-(defn match-rule [dfacts facts [head & patterns]]
+(defn- match-rule [dfacts facts [head & patterns]]
   (for [env (second (match-patterns patterns dfacts facts))]
     (into [] (map #(env % %)) head)))
 
-(defn saturate [facts rules]
+(defn- saturate [facts rules]
   (loop [dfacts facts, facts #{}]
     (let [facts' (into facts dfacts)
           dfacts' (into #{} (comp (mapcat #(match-rule dfacts facts %)) (remove facts')) rules)]
@@ -59,11 +59,12 @@
   (-> facts (saturate rules) (match-rule #{} query) set))
 
 (defn query->map [query]
-  (->> query
-       (partition-by keyword?)
-       (partition 2)
-       (map (fn [[[k] v]] [k v]))
-       (into {})))
+  (letfn [(q->pairs [qq]
+            (let [q (partition-by keyword? qq)]
+              (map #(conj (vec %1) %2)
+                   (take-nth 2 q)
+                   (take-nth 2 (rest q)))))]
+    (into {} (q->pairs query))))
 
 (defn q
   ([query db] (q query db '()))
@@ -103,11 +104,13 @@
        [?pid :emergency/type ?problem]]
      fdb)
 
+  
+
   (query->map '[:find ?problem ?response
                 :where
                 [?id :response/type   ?response]
                 [?id :response/to     ?pid]
                 [?pid :emergency/type ?problem]])
-)
 
 
+  )
