@@ -2,11 +2,20 @@
   "A modified version of Christophe Grand's 39loc Datalog
   implementation constrained to EAV-style tuples.")
 
+(defn- lookup-op [op]
+  (case op
+    not= not=
+    = =
+    < <
+    > >
+    <= <=
+    >= >=))
+
 (defn constrain [env [op & args]]
   (let [args (map #(let [v (env % %)] (if (set? v) % v)) args)]
     (if-some [free-var (->> args (filter symbol?) first)]
       (update env free-var (fnil conj #{}) (cons op args))
-      (when (apply (case op not= not= = =) args) env))))
+      (when (apply (lookup-op op) args) env))))
 
 (defn bind [env p v]
   (let [p-or-v (env p p)]
@@ -17,8 +26,7 @@
       (set? p-or-v) (reduce constrain (assoc env p v) p-or-v))))
 
 (defn match [pattern fact env]
-  ;;(println :----> (map vector pattern fact))
-  (assert (= (count pattern) (count fact)) "[e a v] pattern expected.")
+  (assert (= (count pattern) (count fact) 3) "[e a v] pattern expected.")
   (reduce (fn [env [p v]] (or (bind env p v) (reduced nil)))
           env
           (map vector pattern fact)))
