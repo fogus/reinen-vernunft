@@ -26,3 +26,35 @@
 (defmethod print-method LVar [lvar ^Writer writer]
   (.write writer (str lvar)))
 
+(def ID_KEY :db.id)
+(def ^:private db-ids (atom 0))
+
+(defn map->tuples
+  [entity]
+  (let [id (get entity ID_KEY)
+        id  (if id id (swap! db-ids inc))]
+    (for [[k v] entity
+          :when (not= k ID_KEY)]
+      [id k v])))
+
+(defn db->tuples
+  [db]
+  (set (mapcat map->tuples db)))
+
+(defn tuples->db
+  [tuples]
+  )
+
+(comment
+  (-> #{{:person/name "Fred"
+         :person/age 33
+         :address/state "NY"}
+        {:person/name "Ethel"
+         :person/age 31
+         :address/state "NJ"}
+        {:person/name "Jimbo"
+         :person/age 55
+         :address/state "VA"
+         :db.id -1000}}
+      db->tuples)
+  )

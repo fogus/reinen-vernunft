@@ -58,17 +58,22 @@
 (defn q* [facts query rules]
   (-> facts (saturate rules) (match-rule #{} query) set))
 
+(defn query->map [query]
+  (->> query
+       (partition-by keyword?)
+       (partition 2)
+       (map (fn [[[k] v]] [k v]))
+       (into {})))
+
 (defn q
   ([query db] (q query db '()))
   ([query db rules]
-   (let [qq (->> query
-                 (partition-by keyword?)
-                 (partition 2)
-                 (map (fn [[[k] v]] [k v]))
-                 (into {})
-                 ((juxt :find :where))
-                 (apply list*))]
-     (q* db qq rules))))
+   (q* db
+       (->> query
+            query->map
+            ((juxt :find :where))
+            (apply list*))
+       rules)))
 
 (comment
 
@@ -97,6 +102,12 @@
        [?id :response/to     ?pid]
        [?pid :emergency/type ?problem]]
      fdb)
+
+  (query->map '[:find ?problem ?response
+                :where
+                [?id :response/type   ?response]
+                [?id :response/to     ?pid]
+                [?pid :emergency/type ?problem]])
 )
 
 

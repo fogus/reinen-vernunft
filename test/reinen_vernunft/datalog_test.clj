@@ -68,5 +68,9 @@
                     ([?c' :relationship/sibling ?c] [?p :relationship/parent ?c] (not= ?c ?c') [?p :relationship/parent ?c'])]]
     (is (= #{["Lisa"] ["Maggie"]}
            (d/q* edb
-                 '([n] [s :relationship/sibling :bart] [s :person/name n])
-                 sib-rules)))))
+                 '([?n] [?s :relationship/sibling :bart] [?s :person/name ?n])
+                 sib-rules)))
+    (is (= #{["Abe"] ["Mona"]}
+           (d/q* edb
+                 '([?n] [?s :relationship/grand-parent :lisa] [?s :person/name ?n])
+                 anc-rules)))))
