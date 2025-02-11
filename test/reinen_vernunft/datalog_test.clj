@@ -42,3 +42,31 @@
                  '[([:parent c p] [:father c p])
                    ([:parent c p] [:mother c p])
                    ([:sibling c c'] [:parent c p] (not= c c') [:parent c' p])])))))
+
+(deftest test-datalog-q*-with-rules2
+  (let [edb #{[:homer :person/name "Homer"]
+              [:bart :person/name "Bart"]
+              [:lisa :person/name "Lisa"]
+              [:marge :person/name "Marge"]
+              [:maggie :person/name "Maggie"]
+              [:abe :person/name "Abe"]
+              [:mona :person/name "Mona"]
+              [:homer :relationship/father :bart]
+              [:marge :relationship/mother :bart]
+              [:homer :relationship/father :lisa]
+              [:marge :relationship/mother :lisa]
+              [:homer :relationship/father :maggie]
+              [:marge :relationship/mother :maggie]
+              [:abe :relationship/father :homer]
+              [:mona :relationship/mother :marge]}
+        rules '[([p :relationship/parent c] [p :relationship/father c])
+                ([p :relationship/parent c] [p :relationship/mother c])
+                ([gp :relationship/grand-parent c] [gp :relationship/parent p] [p :relationship/parent c])
+                ([p :relationship/ancestor c] [p :relationship/parent c])
+                ([ancp :relationship/ancestor c] [anc :relationship/ancestor c] [ancp :relationship/parent anc])]]
+    (is (= #{[:lisa] [:maggie]}
+           (d/q* edb
+                 '([s] [s :relationship/sibling :bart])
+                 '[([p :relationship/parent c] [p :relationship/father c])
+                   ([p :relationship/parent c] [p :relationship/mother c])
+                   ([c' :relationship/sibling c] [p :relationship/parent c] (not= c c') [p :relationship/parent c'])])))))
