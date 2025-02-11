@@ -58,14 +58,15 @@
               [:marge :relationship/mother :maggie]
               [:abe :relationship/father :homer]
               [:mona :relationship/mother :marge]}
-        rules '[([p :relationship/parent c] [p :relationship/father c])
-                ([p :relationship/parent c] [p :relationship/mother c])
-                ([gp :relationship/grand-parent c] [gp :relationship/parent p] [p :relationship/parent c])
-                ([p :relationship/ancestor c] [p :relationship/parent c])
-                ([ancp :relationship/ancestor c] [anc :relationship/ancestor c] [ancp :relationship/parent anc])]]
+        anc-rules '[([?p :relationship/parent ?c] [?p :relationship/father ?c])
+                    ([?p :relationship/parent ?c] [?p :relationship/mother ?c])
+                    ([?gp :relationship/grand-parent ?c] [?gp :relationship/parent ?p] [?p :relationship/parent ?c])
+                    ([?p :relationship/ancestor ?c] [?p :relationship/parent ?c])
+                    ([?ancp :relationship/ancestor ?c] [?anc :relationship/ancestor ?c] [?ancp :relationship/parent ?anc])]
+        sib-rules '[([?p :relationship/parent ?c] [?p :relationship/father ?c])
+                    ([?p :relationship/parent ?c] [?p :relationship/mother ?c])
+                    ([?c' :relationship/sibling ?c] [?p :relationship/parent ?c] (not= ?c ?c') [?p :relationship/parent ?c'])]]
     (is (= #{["Lisa"] ["Maggie"]}
            (d/q* edb
                  '([n] [s :relationship/sibling :bart] [s :person/name n])
-                 '[([p :relationship/parent c] [p :relationship/father c])
-                   ([p :relationship/parent c] [p :relationship/mother c])
-                   ([c' :relationship/sibling c] [p :relationship/parent c] (not= c c') [p :relationship/parent c'])])))))
+                 sib-rules)))))
