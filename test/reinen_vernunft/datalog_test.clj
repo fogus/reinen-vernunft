@@ -10,12 +10,12 @@
               [-1000 :response/to -50]
               [-1000 :response/type :response.type/activate-sprinklers]}]
     (is (= #{[:response.type/kill-electricity] [:response.type/activate-sprinklers]}
-           (d/q* fkb
+           (#'d/q* fkb
                  '([?response] [_ :response/type ?response])
                  '())))
 
     (is (= #{[:emergency.type/fire :response.type/activate-sprinklers] [:emergency.type/flood :response.type/kill-electricity]}
-           (d/q* fkb
+           (#'d/q* fkb
                  '([?problem ?response]
                    [?id :response/type   ?response]
                    [?id :response/to     ?pid]
@@ -24,7 +24,7 @@
 
     (is (= #{[:response.type/activate-sprinklers :response/to :emergency.type/fire]
              [:response.type/kill-electricity :response/to :emergency.type/flood]}
-           (d/q* fkb
+           (#'d/q* fkb
                  '([?response :response/to ?problem]
                    [?id :response/type   ?response]
                    [?id :response/to     ?pid]
@@ -48,19 +48,19 @@
               [4 :a/num 4]
               [5 :a/num 5]}]
     (is (= #{[0]}
-           (d/q* nkb '([?num] [0 :a/num ?num]) '())))
+           (#'d/q* nkb '([?num] [0 :a/num ?num]) '())))
     (is (= #{[0] [1] [2]}
-           (d/q* nkb '([?num] [_ :a/num ?num] (< ?num 3)) '())))
+           (#'d/q* nkb '([?num] [_ :a/num ?num] (< ?num 3)) '())))
     (is (= #{[1] [2]}
-           (d/q* nkb '([?num] [_ :a/num ?num] (< ?num 3) (> ?num 0)) '())))
+           (#'d/q* nkb '([?num] [_ :a/num ?num] (< ?num 3) (> ?num 0)) '())))
     (is (= #{[0]}
-           (d/q* nkb '([?num] [_ :a/num ?num] (= ?num 0)) '())))
+           (#'d/q* nkb '([?num] [_ :a/num ?num] (= ?num 0)) '())))
     (is (= #{[0] [1] [2] [3] [4]}
-           (d/q* nkb '([?num] [_ :a/num ?num] (not= ?num 5)) '())))
+           (#'d/q* nkb '([?num] [_ :a/num ?num] (not= ?num 5)) '())))
     (is (= #{[0] [1] [2] [3] [4]}
-           (d/q* nkb '([?num] [_ :a/num ?num] (<= ?num 4)) '())))
+           (#'d/q* nkb '([?num] [_ :a/num ?num] (<= ?num 4)) '())))
     (is (= #{[5] [1] [2] [3] [4]}
-           (d/q* nkb '([?num] [_ :a/num ?num] (>= ?num 1)) '())))))
+           (#'d/q* nkb '([?num] [_ :a/num ?num] (>= ?num 1)) '())))))
 
 (deftest test-datalog-q*-with-rules
   (let [ekb {:facts #{[:homer :person/name "Homer"]

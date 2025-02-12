@@ -1,17 +1,16 @@
 (ns fogus.reinen-vernunft.datalog
-  "A modified version of Christophe Grand's 39loc Datalog implementation
-  adding more operators and allowing a Datomic-style query function. To
-  understand the core implementation I recommend reading Christophe's posts
-  at:
+  "A minimal implementation of Datalog.")
 
-  - https://buttondown.com/tensegritics-curiosities/archive/writing-the-worst-datalog-ever-in-26loc
-  - https://buttondown.com/tensegritics-curiosities/archive/half-dumb-datalog-in-30-loc/
-  - https://buttondown.com/tensegritics-curiosities/archive/restrained-datalog-in-39loc/
-
-  While the implementation here may diverge over time, the articles above are
-  a master class in simplicity and emergent behavior.
-
-  ")
+;;  Implementation is a modified version of Christophe Grand's 39loc Datalog implementation
+;;  adding more operators and allowing a Datomic-style query function. To
+;;  understand the core implementation I recommend reading Christophe's posts:
+;;
+;;  - https://buttondown.com/tensegritics-curiosities/archive/writing-the-worst-datalog-ever-in-26loc
+;;  - https://buttondown.com/tensegritics-curiosities/archive/half-dumb-datalog-in-30-loc/
+;;  - https://buttondown.com/tensegritics-curiosities/archive/restrained-datalog-in-39loc/
+;;
+;;  While this implementation may diverge over time, the articles above are
+;;  a master class in simplicity and emergent behavior.
 
 (defn- lookup-op [op]
   (case op
@@ -66,7 +65,7 @@
           dfacts' (into #{} (comp (mapcat #(match-rule dfacts facts %)) (remove facts')) rules)]
       (cond->> facts' (seq dfacts') (recur dfacts')))))
 
-(defn q* [facts query rules]
+(defn- q* [facts query rules]
   (-> facts (saturate rules) (match-rule #{} query) set))
 
 (defn query->map [query]
