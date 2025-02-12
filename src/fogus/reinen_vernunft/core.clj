@@ -7,6 +7,20 @@
 ;   You must not remove this notice, or any other, from this software.
 
 (ns fogus.reinen-vernunft.core
+  "Most functions in reinen-vernunft work off of one or more of the following root
+  concepts:
+
+  - Entity: a hashmap with a :kb/id key mapped to a unique value and namespaced keys
+  - Table: a set of hashmaps or Entities
+  - Fact: a vector triple in the form [entity-id attribute value]
+  - Relation: a set of Facts pertaining to a particular Entity
+  - LVar: a symbol naming a logic variable that can bind to any value
+  - Ground: a concrete value
+  - Query: a set of Facts containing a mix of LVars and Grounds  
+  - Rules: a set of Facts describing synthetic relations
+  - Production: a pair of: antecedent query and consequent Facts
+  - KB: a set of Relations about many Entities and possibly containing Productions  
+  "
   (:import java.io.Writer))
 
 ;; Logic variables
@@ -26,10 +40,10 @@
 (defmethod print-method LVar [lvar ^Writer writer]
   (.write writer (str lvar)))
 
-(def ID_KEY :db.id)
+(def ID_KEY :kb/id)
 (def ^:private db-ids (atom 0))
 
-(defn map->tuples
+(defn map->relation
   [entity]
   (let [id (get entity ID_KEY)
         id  (if id id (swap! db-ids inc))]
@@ -37,13 +51,9 @@
           :when (not= k ID_KEY)]
       [id k v])))
 
-(defn db->tuples
+(defn table->kb
   [db]
-  (set (mapcat map->tuples db)))
-
-(defn tuples->db
-  [tuples]
-  )
+  {:facts (set (mapcat map->relation db))})
 
 (comment
   (-> #{{:person/name "Fred"
@@ -55,6 +65,6 @@
         {:person/name "Jimbo"
          :person/age 55
          :address/state "VA"
-         :db.id -1000}}
-      db->tuples)
+         :kb/id -1000}}
+      table->kb)
   )

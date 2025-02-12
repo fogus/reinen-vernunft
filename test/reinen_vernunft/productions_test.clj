@@ -72,6 +72,14 @@
 
 (deftest test-cycle
   (testing "that the whole cycle occurs as expected"
+    (let [results (p/cycle p/naive-qf
+                           '{:productions [{:antecedent   [[?id :person/name ?n]
+                                                           [?id :isa/human? true]]
+                                            :consequent [[?id :isa/mortal? true]]}]
+                             :facts #{[42 :person/name "Socrates"]
+                                      [42 :isa/human? true]}})]
+      (is (= #{[42 :isa/mortal? true] [42 :isa/human? true] [42 :person/name "Socrates"]}
+             results)))
     (let [results (p/cycle p/naive-qf KB)]
       (is (= #{[:response.type/kill-electricity] [:response.type/activate-sprinklers]}
              (d/q '[:find ?response

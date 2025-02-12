@@ -1,6 +1,17 @@
 (ns fogus.reinen-vernunft.datalog
-  "A modified version of Christophe Grand's 39loc Datalog
-  implementation constrained to EAV-style tuples.")
+  "A modified version of Christophe Grand's 39loc Datalog implementation
+  adding more operators and allowing a Datomic-style query function. To
+  understand the core implementation I recommend reading Christophe's posts
+  at:
+
+  - https://buttondown.com/tensegritics-curiosities/archive/writing-the-worst-datalog-ever-in-26loc
+  - https://buttondown.com/tensegritics-curiosities/archive/half-dumb-datalog-in-30-loc/
+  - https://buttondown.com/tensegritics-curiosities/archive/restrained-datalog-in-39loc/
+
+  While the implementation here may diverge over time, the articles above are
+  a master class in simplicity and emergent behavior.
+
+  ")
 
 (defn- lookup-op [op]
   (case op
@@ -26,7 +37,7 @@
       (set? p-or-v) (reduce constrain (assoc env p v) p-or-v))))
 
 (defn- match [pattern fact env]
-  (assert (= (count pattern) (count fact) 3) "[e a v] pattern expected.")
+  (assert (= (count pattern) (count fact) 3) (str "[e a v] pattern expected, got: " pattern " - " fact))
   (reduce (fn [env [p v]] (or (bind env p v) (reduced nil)))
           env
           (map vector pattern fact)))
@@ -67,28 +78,33 @@
     (into {} (q->pairs query))))
 
 (defn q
-  ([query db] (q query db '()))
-  ([query db rules]
+  ([query kb] (q query kb '()))
+  ([query kb rules]
    (let [{:keys [find where]} (query->map query)
-         find (if (vector? (first find)) (first find) find)]
-     (q* db
+         find (if (vector? (first find)) (first find) find)
+         facts (cond (map? kb) (:facts kb)
+                     (set? kb) kb
+                     :else (throw (ex-info "Cannot derive facts from KB"
+                                           {:kb/type (type kb)})))]
+     (q* facts
          (list* find where)
          rules))))
 
 (comment
-  (def fdb
-    #{[-1002 :response/to -51]
-      [-51 :emergency/type :emergency.type/flood]
-      [-50 :emergency/type :emergency.type/fire]
-      [-1002 :response/type :response.type/kill-electricity]
-      [-1000 :response/to -50]
-      [-1000 :response/type :response.type/activate-sprinklers]})
+  (def fkb
+    {:facts
+     #{[-1002 :response/to -51]
+       [-51 :emergency/type :emergency.type/flood]
+       [-50 :emergency/type :emergency.type/fire]
+       [-1002 :response/type :response.type/kill-electricity]
+       [-1000 :response/to -50]
+       [-1000 :response/type :response.type/activate-sprinklers]}})
 
-  (q* fdb
+  (q* fkb
      '([?response] [_ :response/type ?response])
      '())
 
-  (q* fdb
+  (q* fkb
      '([?problem ?response]
        [?id :response/type   ?response]
        [?id :response/to     ?pid]
@@ -100,7 +116,7 @@
        [?id :response/type   ?response]
        [?id :response/to     ?pid]
        [?pid :emergency/type ?problem]]
-     fdb)
+     fkb)
 
   
 
