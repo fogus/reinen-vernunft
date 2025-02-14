@@ -89,8 +89,8 @@
     (into {} (q->pairs query))))
 
 (defn q
-  "Queries a knowledge base given the vector form of a query and an
-  optional set of rules.
+  "Queries a knowledge base or a set of relations given a vector
+  form of a query and an optional set of rules.
 
   A query takes the form:
 
