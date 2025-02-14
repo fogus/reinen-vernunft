@@ -65,10 +65,22 @@
           dfacts' (into #{} (comp (mapcat #(match-rule dfacts facts %)) (remove facts')) rules)]
       (cond->> facts' (seq dfacts') (recur dfacts')))))
 
-(defn- q* [facts query rules]
+(defn- q*
+  "Underlying query impl.
+
+   - facts: a set of tuples
+   - query: a seq of ([..binds..] tuple*)
+   - rules: a seq of ((head-tuple tuple*)*)
+
+  [..binds..] can contain lvars and grounds to form output tuples
+  "
+  [facts query rules]
   (-> facts (saturate rules) (match-rule #{} query) set))
 
-(defn query->map [query]
+(defn query->map
+  "Accepts the vector form of a Datalog query and outputs a map
+  of the component sections as keyword->seq mappings."
+  [query]
   (letfn [(q->pairs [qq]
             (let [q (partition-by keyword? qq)]
               (map #(conj (vec %1) %2)
@@ -77,6 +89,50 @@
     (into {} (q->pairs query))))
 
 (defn q
+  "Queries a knowledge base given the vector form of a query and an
+  optional set of rules.
+
+  A query takes the form:
+
+  [:find find-spec :where clauses]
+
+  A find-spec can be any number of lvars like:
+
+  [:find ?e ?v :where ...]
+
+  or a tuple containing a mix of lvars and grounds which is used to
+  build output tuples from the query results:
+
+  [:find [?e :an/attribute ?v] :where ...]
+
+  The :where clauses are any number of tuples containing a mix of
+  lvars and grounds:
+
+  [:find ...
+   :where
+   [?e :an/attribute ?v]
+   [?e :another/attr 42]]
+
+  :where clauses may also contain filters defined as calls to predicates
+  used to constrain the values that may bind to lvars:
+
+  [:find ...
+   :where
+   [?e :an/attribute ?v]
+   (= ?v 42)]
+
+  The possible filter predicates are: =, not=, <, >, <=, >=
+
+  rules are a vector of lists where each list defines a rule with a
+  single head tuple followed by any number of rule clauses:
+
+  ([?p :relationship/parent ?c] [?p :relationship/father ?c])
+  
+  The rule above defines a syntheic relation called
+  `:relationship/parent` defined in terms of another relation
+  `relationship/father`. Rules describe synthetic relations derived
+  from real relations in the data or other synthetic relations
+  derived from previous rule applications."
   ([query kb] (q query kb '()))
   ([query kb rules]
    (let [{:keys [find where]} (query->map query)
