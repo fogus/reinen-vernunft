@@ -1,5 +1,6 @@
 (ns reinen-vernunft.datalog-test
   (:require [clojure.test :refer :all]
+            [fogus.reinen-vernunft.core :as core]
             [fogus.reinen-vernunft.datalog :as d]))
 
 (deftest test-datalog-q*-no-rules
@@ -100,3 +101,25 @@
                   [?s :person/name ?n]]
                 ekb
                 anc-rules)))))
+
+(deftest test-from-table
+  (let [e {:person/name "Ethel"
+           :person/age 31
+           :address/state "NJ"
+           :kb/id ::ethel}
+        table #{{:person/name "Fred"
+                 :person/age 33
+                 :address/state "NY"}
+                e
+                {:person/name "Jimbo"
+                 :person/age 55
+                 :address/state "VA"
+                 :kb/id -1000}}]
+    (is (= ::ethel (-> e core/map->relation ffirst)))
+    (is (= #{["Fred"] ["Ethel"]}
+           (d/q '[:find ?name
+                  :where
+                  [?p :person/age ?age]
+                  (> 50 ?age)
+                  [?p :person/name ?name]]
+                (core/table->kb table))))))

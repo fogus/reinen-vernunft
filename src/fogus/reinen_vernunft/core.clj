@@ -44,6 +44,8 @@
 (def ^:private db-ids (atom 0))
 
 (defn map->relation
+  "Converts a map to a set of tuples for that map, applying a unique
+  :kb/id if the map doesn't already have a value mapped for that key."
   [entity]
   (let [id (get entity ID_KEY)
         id  (if id id (swap! db-ids inc))]
@@ -52,19 +54,8 @@
       [id k v])))
 
 (defn table->kb
+  "Converts a Table into a KB, applying unique :kb/id to maps without a
+  mapped identity value."
   [db]
   {:facts (set (mapcat map->relation db))})
 
-(comment
-  (-> #{{:person/name "Fred"
-         :person/age 33
-         :address/state "NY"}
-        {:person/name "Ethel"
-         :person/age 31
-         :address/state "NJ"}
-        {:person/name "Jimbo"
-         :person/age 55
-         :address/state "VA"
-         :kb/id -1000}}
-      table->kb)
-  )
