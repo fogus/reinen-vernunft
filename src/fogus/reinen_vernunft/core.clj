@@ -46,12 +46,14 @@
 (defn map->relation
   "Converts a map to a set of tuples for that map, applying a unique
   :kb/id if the map doesn't already have a value mapped for that key."
-  [entity]
-  (let [id (get entity ID_KEY)
-        id  (if id id (swap! db-ids inc))]
-    (for [[k v] entity
-          :when (not= k ID_KEY)]
-      [id k v])))
+  ([entity]
+   (map->relation #(do % (swap! db-ids inc)) entity))
+  ([idfn entity]
+   (let [id (get entity ID_KEY)
+         id  (if id id (idfn entity))]
+     (for [[k v] entity
+           :when (not= k ID_KEY)]
+       [id k v]))))
 
 (defn table->kb
   "Converts a Table into a KB, applying unique :kb/id to maps without a
