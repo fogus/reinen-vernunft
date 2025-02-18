@@ -1,9 +1,9 @@
-(ns reinen-vernunft.rules-test
+(ns reinen-vernunft.productions-test
   (:require [clojure.test :refer :all]
-            [fogus.reinen-vernunft.rules :as rule]
-            [datascript.core :as d]))
+            [fogus.reinen-vernunft.productions :as p]
+            [fogus.reinen-vernunft.datalog :as d]))
 
-(def rules
+(def productions
   '[{:antecedent   [[?id   :emergency/type :emergency.type/fire]]
      :consequent [[-1000 :response/type  :response.type/activate-sprinklers]
                   [-1000 :response/to    ?id]]}
@@ -14,49 +14,49 @@
 (def all-facts #{[-50 :emergency/type :emergency.type/fire]
                  [-51 :emergency/type :emergency.type/flood]})
 
-(def KB {:rules rules
+(def KB {:productions productions
          :facts all-facts})
 
 (deftest test-unifications
   ""
   (testing "that the context seq is built with a single antecedent pattern."
     (is (= '[{?id -50}]
-           (rule/unifications '[[?id :emergency/type :emergency.type/fire]]
+           (p/unifications '[[?id :emergency/type :emergency.type/fire]]
                               (:facts KB)
                               {})))
 
     (is (= '[{?id -50} {?id -1000000}]
-           (rule/unifications '[[?id :emergency/type :emergency.type/fire]]
+           (p/unifications '[[?id :emergency/type :emergency.type/fire]]
                               (conj all-facts [-1000000 :emergency/type :emergency.type/fire])
                               {}))))
   
   (testing "that the context is built with multiple antecedent patterns"
     (is (= '[{?id -50, ?rid -5000000}]
-           (rule/unifications '[[?id :emergency/type :emergency.type/fire]
+           (p/unifications '[[?id :emergency/type :emergency.type/fire]
                                 [?rid :response/to ?id]]
                               (conj all-facts [-5000000 :response/to -50])
                               {})))))
 
-(deftest test-select-rule
-  (testing "that rules are selected as expected"
-    (let [first-matching-rule (comp first identity)]
-      (is (= (first (:rules KB))
-             (first (rule/select-rule first-matching-rule KB)))))))
+(deftest test-select-production
+  (testing "that productions are selected as expected"
+    (let [first-matching-production (comp first identity)]
+      (is (= (first (:productions KB))
+             (first (p/select-production first-matching-production KB)))))))
 
-(deftest test-apply-rule
-  (testing "that a rule applied to a KB causes expected assertions"
-    (let [first-matching-rule (comp first identity)
-          [rule binds]        (rule/select-rule first-matching-rule KB)]
+(deftest test-apply-production
+  (testing "that a production applied to a KB causes expected assertions"
+    (let [first-matching-production (comp first identity)
+          [production binds]        (p/select-production first-matching-production KB)]
       (is (= #{[-51 :emergency/type :emergency.type/flood]
                [-50 :emergency/type :emergency.type/fire]
                [-1000 :response/type :response.type/activate-sprinklers]
                [-1000 :response/to -50]}
-             (rule/apply-rule rule (:facts KB) binds))))))
+             (p/apply-production production (:facts KB) binds))))))
 
 (deftest test-step
   (testing "that a single step occurs as expected"
-    (let [first-matching-rule (comp first identity)
-          results (rule/step first-matching-rule KB)]
+    (let [first-matching-production (comp first identity)
+          results (p/step first-matching-production KB)]
       (is (= #{[-1000 -50]}
              (d/q '[:find ?from ?to
                     :where 
@@ -72,7 +72,15 @@
 
 (deftest test-cycle
   (testing "that the whole cycle occurs as expected"
-    (let [results (rule/cycle rule/naive-qf KB)]
+    (let [results (p/cycle p/naive-qf
+                           '{:productions [{:antecedent   [[?id :person/name ?n]
+                                                           [?id :isa/human? true]]
+                                            :consequent [[?id :isa/mortal? true]]}]
+                             :facts #{[42 :person/name "Socrates"]
+                                      [42 :isa/human? true]}})]
+      (is (= #{[42 :isa/mortal? true] [42 :isa/human? true] [42 :person/name "Socrates"]}
+             results)))
+    (let [results (p/cycle p/naive-qf KB)]
       (is (= #{[:response.type/kill-electricity] [:response.type/activate-sprinklers]}
              (d/q '[:find ?response
                     :where
