@@ -41,12 +41,13 @@
   (.write writer (str lvar)))
 
 (def ID_KEY :kb/id)
-(def ^:private db-ids (atom 0))
 
-(defn- use-or-gen-id [entity]
-  (if-let [id (get entity ID_KEY)]
-    id
-    (swap! db-ids inc)))
+(def ^:private use-or-gen-id
+  (let [next-id (atom 0)]
+    (fn [entity]
+      (if-let [id (get entity ID_KEY)]
+        id
+        (swap! next-id inc)))))
 
 (defn map->relation
   "Converts a map to a set of tuples for that map, applying a unique
