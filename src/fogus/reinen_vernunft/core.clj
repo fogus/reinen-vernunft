@@ -43,14 +43,18 @@
 (def ID_KEY :kb/id)
 (def ^:private db-ids (atom 0))
 
+(defn- use-or-gen-id [entity]
+  (if-let [id (get entity ID_KEY)]
+    id
+    (swap! db-ids inc)))
+
 (defn map->relation
   "Converts a map to a set of tuples for that map, applying a unique
   :kb/id if the map doesn't already have a value mapped for that key."
   ([entity]
-   (map->relation #(do % (swap! db-ids inc)) entity))
+   (map->relation use-or-gen-id entity))
   ([idfn entity]
-   (let [id (get entity ID_KEY)
-         id  (if id id (idfn entity))]
+   (let [id (idfn entity)]
      (for [[k v] entity
            :when (not= k ID_KEY)]
        [id k v]))))
@@ -58,6 +62,7 @@
 (defn table->kb
   "Converts a Table into a KB, applying unique :kb/id to maps without a
   mapped identity value."
-  [db]
-  {:facts (set (mapcat map->relation db))})
+  ([table] (table->kb use-or-gen-id table))
+  ([idfn table]
+   {:facts (set (mapcat #(map->relation idfn %) table))}))
 

@@ -123,3 +123,17 @@
                   (> 50 ?age)
                   [?p :person/name ?name]]
                 (core/table->kb table))))))
+
+#_(deftest test-datalog-with-fuzzy-ids
+  (let [table #{{:person/name "Fogus"
+                 :favorite/color "Purple"}
+                {:person/name "Phogus"
+                 :spelled/wrong? true}}]
+    (is (= #{["Abe"] ["Mona"]}
+           (d/q '[:find ?n ?c ?sw
+                  :where
+                  [?p :person/name ?n]
+                  [?p :favorite/color ?c]
+                  [?p :spelled/wrong? ?sw]]
+                (core/table->kb #(fogus.reinen-vernunft.fuzzy.soundex/encode )
+                                table))))))
