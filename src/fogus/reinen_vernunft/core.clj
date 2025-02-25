@@ -51,7 +51,11 @@
 
 (defn map->relation
   "Converts a map to a set of tuples for that map, applying a unique
-  :kb/id if the map doesn't already have a value mapped for that key."
+  :kb/id if the map doesn't already have a value mapped for that key.
+
+  An idfn is a function of map -> id and if provided is used to
+  override the default entity id generation and any existing :kb/id
+  values."
   ([entity]
    (map->relation use-or-gen-id entity))
   ([idfn entity]
@@ -62,7 +66,11 @@
 
 (defn table->kb
   "Converts a Table into a KB, applying unique :kb/id to maps without a
-  mapped identity value."
+  mapped identity value.
+
+  An idfn is a function of map -> id and if provided is used to
+  override the default entity id generation and any existing :kb/id
+  values."
   ([table] (table->kb use-or-gen-id table))
   ([idfn table]
    {:facts (set (mapcat #(map->relation idfn %) table))}))
