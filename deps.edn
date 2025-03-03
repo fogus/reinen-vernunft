@@ -18,7 +18,7 @@
             :exec-args {:installer :remote
                         :sign-releases? true
                         :sign-key-id "CBBDC7BE00954E2E3A46C80CA3994949855D2816"
-                        :artifact "target/reinen-vernunft.jar"}}
+                        :artifact "target/rv.jar"}}
            
            :dev {:extra-deps {org.clojure/clojure {:mvn/version "1.12.0"}}}
   }

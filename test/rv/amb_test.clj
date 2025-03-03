@@ -1,6 +1,6 @@
-(ns reinen-vernunft.amb-test
+(ns rv.amb-test
   (:require [clojure.test :refer :all]
-            [fogus.reinen-vernunft.amb :as rv]))
+            [fogus.rv.amb :as rv]))
 
 (deftest test-amb-null-body
   (is (nil? (rv/amb))))

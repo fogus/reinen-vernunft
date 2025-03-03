@@ -1,6 +1,6 @@
-(ns reinen-vernunft.fuzzy.soundex-test
+(ns rv.fuzzy.soundex-test
   (:require [clojure.test :refer :all]
-            [fogus.reinen-vernunft.fuzzy.soundex :as fuzzy]))
+            [fogus.rv.fuzzy.soundex :as fuzzy]))
 
 (def encodings {
                 "Ashcraft" "A261"

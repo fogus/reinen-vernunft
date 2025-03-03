@@ -1,10 +1,10 @@
 (ns build
   (:require [clojure.tools.build.api :as b]))
 
-(def lib 'me.fogus/reinen-vernunft)
+(def lib 'me.fogus/rv)
 (def description "Code conversations in Clojure regarding the application of pure search, reasoning, and query algorithms.")
 ;;(def version (format "0.0.%s" (b/git-count-revs nil)))
-(def version "0.0.4")
+(def version "0.0.5")
 (def class-dir "target/classes")
 (def jar-file (format "target/%s.jar" (name lib)))
 

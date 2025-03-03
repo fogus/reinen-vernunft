@@ -1,4 +1,4 @@
-(ns fogus.reinen-vernunft.search.astar
+(ns fogus.rv.search.astar
   "A* search implementation.")
 
 ;; WIP

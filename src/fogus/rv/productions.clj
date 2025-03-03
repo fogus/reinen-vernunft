@@ -6,7 +6,7 @@
 ;   the terms of this license.
 ;   You must not remove this notice, or any other, from this software.
 
-(ns fogus.reinen-vernunft.productions
+(ns fogus.rv.productions
   "The simplest possible production rules system that uses a set
    of EAV tuples as its knowledge base."
   (:require [clojure.core.unify :as u]

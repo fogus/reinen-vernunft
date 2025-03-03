@@ -1,4 +1,4 @@
-(ns fogus.reinen-vernunft.datalog
+(ns fogus.rv.datalog
   "A minimal implementation of Datalog.")
 
 ;;  Implementation is a modified version of Christophe Grand's 39loc Datalog implementation

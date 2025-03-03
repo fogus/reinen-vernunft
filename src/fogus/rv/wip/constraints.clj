@@ -8,10 +8,10 @@
 
 ;; WIP
 
-(ns fogus.reinen-vernunft.wip.constraints
+(ns fogus.rv.wip.constraints
   "A simple constraints solver."
-  (:require [fogus.reinen-vernunft.core :as core]
-            [fogus.reinen-vernunft.util :as util]
+  (:require [fogus.rv.core :as core]
+            [fogus.rv.util :as util]
             [clojure.core.unify         :as unify]
             [fogus.evalive              :as live]))
 

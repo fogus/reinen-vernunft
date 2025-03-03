@@ -6,7 +6,7 @@
 ;   the terms of this license.
 ;   You must not remove this notice, or any other, from this software.
 
-(ns fogus.reinen-vernunft.util)
+(ns fogus.rv.util)
 
 (defn process-bindings [bindings]
   {:names  (take-nth 2 bindings)

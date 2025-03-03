@@ -6,10 +6,10 @@
 ;   the terms of this license.
 ;   You must not remove this notice, or any other, from this software.
 
-(ns fogus.reinen-vernunft.amb
+(ns fogus.rv.amb
   "Provides an implementation of McCarthy's `amb` operator with
    binding forms and acceptance test operator."
-  (:require [fogus.reinen-vernunft.util :as util]))
+  (:require [fogus.rv.util :as util]))
 
 (defmacro accept [condition ret]
   `(do (when (not ~condition)

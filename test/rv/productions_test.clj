@@ -1,7 +1,7 @@
-(ns reinen-vernunft.productions-test
+(ns rv.productions-test
   (:require [clojure.test :refer :all]
-            [fogus.reinen-vernunft.productions :as p]
-            [fogus.reinen-vernunft.datalog :as d]))
+            [fogus.rv.productions :as p]
+            [fogus.rv.datalog :as d]))
 
 (def productions
   '[{:antecedent   [[?id   :emergency/type :emergency.type/fire]]

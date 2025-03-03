@@ -1,8 +1,8 @@
-(ns reinen-vernunft.datalog-test
+(ns rv.datalog-test
   (:require [clojure.test :refer :all]
-            [fogus.reinen-vernunft.core :as core]
-            [fogus.reinen-vernunft.datalog :as d]
-            [fogus.reinen-vernunft.fuzzy.soundex :as s]))
+            [fogus.rv.core :as core]
+            [fogus.rv.datalog :as d]
+            [fogus.rv.fuzzy.soundex :as s]))
 
 (deftest test-datalog-q*-no-rules
   (let [fkb #{[-1002 :response/to -51]
@@ -122,6 +122,39 @@
                   :where
                   [?p :person/age ?age]
                   (> 50 ?age)
+                  [?p :person/name ?name]]
+                (core/table->kb table))))))
+
+(deftest test-with-sets
+  (let [table #{{:person/name "Fred"
+                 :address/state "NY"
+                 :person/tag #{}}
+                {:person/name "Ethel"
+                 :address/state "NJ"
+                 :kb/id ::ethel
+                 :person/tag #{:foo/bar :baz/quux}}
+                {:person/name "Jimbo"
+                 :address/state "VA"
+                 :person/tag #{:baz/quux}
+                 :kb/id -1000}}]
+    (is (= #{["Jimbo"] ["Ethel"]}
+           (d/q '[:find ?name
+                  :where
+                  [?p :person/tag :baz/quux]
+                  [?p :person/name ?name]]
+                (core/table->kb table))))
+
+    (is (= #{["Ethel"]}
+           (d/q '[:find ?name
+                  :where
+                  [?p :person/tag :foo/bar]
+                  [?p :person/name ?name]]
+                (core/table->kb table))))
+
+    (is (= #{}
+           (d/q '[:find ?name
+                  :where
+                  [?p :person/tag ::this-is-nowhere]
                   [?p :person/name ?name]]
                 (core/table->kb table))))))
 

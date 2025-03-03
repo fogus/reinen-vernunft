@@ -3,9 +3,9 @@
   <modelVersion>4.0.0</modelVersion>
   <packaging>jar</packaging>
   <groupId>me.fogus</groupId>
-  <artifactId>reinen-vernunft</artifactId>
-  <version>0.0.4</version>
-  <name>reinen-vernunft</name>
+  <artifactId>rv</artifactId>
+  <version>0.0.5</version>
+  <name>rv</name>
   <dependencies>
     <dependency>
       <groupId>org.clojure</groupId>

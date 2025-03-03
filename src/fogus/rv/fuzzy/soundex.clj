@@ -1,4 +1,4 @@
-(ns fogus.reinen-vernunft.fuzzy.soundex
+(ns fogus.rv.fuzzy.soundex
   "I came across the Soundex algorithm when researching the retro KAMAS outlining application.
   Soundex is a phonetic algorithm for indexing words by sound."
   (:require [clojure.string :as string]))
