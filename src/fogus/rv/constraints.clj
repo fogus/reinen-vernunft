@@ -14,16 +14,14 @@
     the LVars in :variables and Clojure functions."
   (:require [fogus.rv.core :as core]
             [fogus.rv.util :as util]
-            clojure.core.unify))
+            [fogus.rv.impl.unification :as u]))
 
 (defn- cartesian-groups [vars]
   (let [tuples (util/cart (map :range vars))]
     (map #(map vector vars %) tuples)))
 
-(def ^:private subst (clojure.core.unify/make-occurs-subst-fn core/lv?))
-
 (defn- test-in-context [formula group]
-  (let [formula' (subst formula (into {} group))]
+  (let [formula' (u/subst formula (into {} group))]
     (eval formula')))
 
 (defn- find1 [formula [group & more :as groupings]]
