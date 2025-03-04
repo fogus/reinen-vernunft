@@ -14,26 +14,24 @@
   - Table: a set of hashmaps or Entities
   - Fact: a vector triple in the form [entity-id attribute value]
   - Relation: a set of Facts pertaining to a particular Entity
-  - LVar: a symbol naming a logic variable that can bind to any value
+  - LVar: a logic variable that can bind to any value in its :range
   - Ground: a concrete value
   - Query: a set of Facts containing a mix of LVars and Grounds  
   - Rules: a set of Facts describing synthetic relations
   - Production: a pair of: antecedent query and consequent Facts
   - KB: a set of Relations about many Entities and possibly containing Productions  
-  "
+  - Constraint Description: a set of LVars and a Formula describing the domain of their values
+  - Formula: a list describing a predicate expression of mixed LVars and clojure functions"
   (:import java.io.Writer))
 
 ;; Logic variables
 
-(deftype LVar [id]
+(defrecord LVar [domain range]
   Object
-  (equals [this other]
-    (if (instance? LVar other) 
-      (= (.-id this)
-         (.-id other))
-      false))
   (toString [this]
-    (str "_." id)))
+    (if range
+      (str "?" domain "::" range)
+      (str "?" domain))))
 
 (def lv? #(instance? LVar %))
 
